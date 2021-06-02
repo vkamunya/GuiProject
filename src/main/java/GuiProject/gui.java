@@ -1,18 +1,23 @@
 package GuiProject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.io.FileWriter;
 
 
-public class gui {
+
+public class gui extends javax.swing.JFrame{
 
     private JButton Login;
     private JPanel panel1;
-    private JTextField username;
-    private JTextField password;
+     JTextField username;
+     JTextField password;
+    private JButton saveButton;
 
     public gui() {
         Login.addActionListener(new ActionListener() {
@@ -45,19 +50,43 @@ public class gui {
                             }
                             conn.close();
 
+
                     }
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
 
+
                 }
+
 
             });
 
 
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JSONObject obj = new JSONObject();
+                JSONArray jrr = new JSONArray();
+                obj.put("Username",username.getText());
+                obj.put("Password",password.getText());
+                jrr.add(obj);
+                JOptionPane.showMessageDialog(null,obj);
+                try {
+                    FileWriter file = new FileWriter("Userdata.json");
+                    file.write(jrr.toJSONString());
+                    file.close();
+                }
+                catch (Exception e2){
+                    JOptionPane.showMessageDialog(null,"Error occured");
+                }
+                JOptionPane.showMessageDialog(null,"Data Saved");
 
 
-        }
+
+            }
+        });
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Successful");
@@ -66,8 +95,6 @@ public class gui {
         frame.pack();
         frame.setVisible(true);
 
+            }
 
-    }
-
-
-}
+        }
